@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>線上自習室</title>
+<meta name="theme-color" content="#16213a">
+<meta name="apple-mobile-web-app-title" content="線上自習室">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* 線上自習室：GitHub 入口頁。跟自習室同樣的夜晚配色 */
+:root{--bg:#16213a;--card:#1f2d4f;--ink:#eef2fb;--soft:#a9b6d2;--hi:#ffc861;--pri:#3d6fd8;--line:#2f3f66}
+*{box-sizing:border-box;min-width:0}[hidden]{display:none!important}
+body{margin:0;background:radial-gradient(120% 60% at 50% 0,#24345a,var(--bg));color:var(--ink);font:16px/1.6 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+.wrap{max-width:460px;margin:0 auto;padding:48px 20px 40px;text-align:center}
+.icon{width:132px;height:132px;border-radius:30px;box-shadow:0 12px 30px #0006;display:block;margin:0 auto}
+h1{font-size:34px;line-height:1.1;margin:22px 0 6px}
+.sub{color:var(--soft);margin:0 0 28px}
+.btn{display:flex;align-items:center;justify-content:center;width:100%;min-height:56px;border:0;border-radius:16px;font:inherit;font-size:18px;font-weight:700;cursor:pointer;text-decoration:none}
+.go{background:var(--hi);color:#1a1a1a}
+.add{background:transparent;color:var(--ink);border:1.5px solid var(--line);margin-top:12px}
+.btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.note{font-size:14px;color:var(--soft);margin:18px 0 0}
+.card{background:var(--card);border-radius:18px;padding:18px;text-align:left;margin-top:24px}
+.card h2{font-size:19px;margin:0 0 10px}
+ol{margin:0;padding-left:1.4em}ol li{margin:8px 0}
+.key{display:inline-block;background:#ffffff1a;border-radius:8px;padding:0 8px;font-weight:500;white-space:nowrap}
+.shot{display:inline-flex;vertical-align:-5px;width:22px;height:22px;border:1.5px solid var(--ink);border-radius:5px;align-items:center;justify-content:center;font-size:13px}
+.warn{background:#5a2a1a;color:#ffd9c7;border-radius:12px;padding:10px 14px;font-size:14px;margin-bottom:18px;text-align:left}
+.ok{color:var(--hi)}
+.modal{position:fixed;inset:0;background:#000a;display:flex;align-items:flex-end;justify-content:center;z-index:9}
+.sheet{background:var(--card);width:100%;max-width:480px;border-radius:22px 22px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));text-align:left}
+.sheet h2{margin:0 0 12px;font-size:21px}
+</style></head><body>
+<div class="wrap">
+  <div class="warn" id="setupWarn" hidden>老師還沒有設定自習室的網址：請打開 index.html，把最上面的 <b>APP_URL</b> 換成 Apps Script 的網頁網址。</div>
+  <img class="icon" src="icons/icon-512.png" alt="">
+  <h1>線上自習室</h1>
+  <p class="sub">打開就有人陪你讀書</p>
+
+  <a class="btn go" id="go" href="#">進入自習室</a>
+  <button class="btn add" id="add">加到手機主畫面</button>
+  <p class="note" id="addedNote" hidden><span class="ok">已經加到主畫面了</span>，之後從主畫面的圖示打開就好。</p>
+
+  <div class="card">
+    <h2>第一次使用</h2>
+    <ol>
+      <li>用 <b>學校 Google 帳號</b>（學號@sssh.tp.edu.tw）登入。手機上同時有好幾個帳號的話，記得切換成學校帳號。</li>
+      <li>取一個暱稱、選你的樣子。</li>
+      <li>選科目，按「開始讀書」就好。手機可以關螢幕，計時會繼續。</li>
+    </ol>
+  </div>
+</div>
+
+<!-- iPhone 加到主畫面的教學 -->
+<div class="modal" id="ios" hidden><div class="sheet">
+  <h2>iPhone 加到主畫面</h2>
+  <ol>
+    <li>用 <b>Safari</b> 打開這一頁（在 LINE 裡打開的話，先點右下角選「用 Safari 開啟」）。</li>
+    <li>點網址列旁邊的 <span class="key">⋯</span>，再點 <span class="key"><span class="shot">↑</span> 分享</span>。</li>
+    <li>往下滑，點 <span class="key">加入主畫面</span>。</li>
+    <li>把 <span class="key">以網頁 App 打開</span> 的開關<b>關掉</b>，這樣會用 Safari 打開，不用重新登入學校帳號。</li>
+    <li>點右上角 <span class="key">加入</span>，主畫面就會出現「線上自習室」。</li>
+  </ol>
+  <button class="btn go" id="iosOk" style="margin-top:16px">知道了</button>
+</div></div>
+
+<!-- 其他瀏覽器的教學 -->
+<div class="modal" id="other" hidden><div class="sheet">
+  <h2>加到主畫面</h2>
+  <ol>
+    <li>用 <b>Chrome</b> 打開這一頁（在 LINE 裡打開的話，先選「用預設瀏覽器開啟」）。</li>
+    <li>點右上角 <span class="key">⋮</span>。</li>
+    <li>點 <span class="key">加到主畫面</span> 或 <span class="key">安裝應用程式</span>。</li>
+  </ol>
+  <button class="btn go" id="otherOk" style="margin-top:16px">知道了</button>
+</div></div>
+
+<script>
+{
+// ▼▼▼ 老師要改的地方：換成 Apps Script「網頁應用程式」的網址 ▼▼▼
+const APP_URL = 'https://script.google.com/a/macros/sssh.tp.edu.tw/s/在這裡貼上你的部署ID/exec';
+// ▲▲▲ 改完存檔、上傳到 GitHub 就好 ▲▲▲
+
+const $ = s => document.querySelector(s);
+const ready = /^https:\/\/script\.google\.com\//.test(APP_URL) && !APP_URL.includes('在這裡貼上');
+const LS = { get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}} };
+const ua = navigator.userAgent, isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const q = new URLSearchParams(location.search);
+
+$('#setupWarn').hidden = ready;
+$('#go').href = ready ? APP_URL : '#';
+$('#go').addEventListener('click', e => { if (!ready) { e.preventDefault(); $('#setupWarn').scrollIntoView(); } });
+
+// 從主畫面打開：直接進自習室
+// 安卓：manifest 的 start_url 帶 ?go=1；iPhone：從 ?home=1 這個網址加到主畫面，之後打開就直接進去
+if (ready && (q.get('go') === '1' || standalone || (q.get('home') === '1' && LS.get('lib_home_seen')))) {
+  location.replace(APP_URL);
+}
+if (q.get('home') === '1') LS.set('lib_home_seen', '1');
+
+// 已經從主畫面打開過，就不用再顯示「加到主畫面」
+if (standalone || LS.get('lib_installed')) { $('#add').hidden = true; $('#addedNote').hidden = false; }
+
+// 安卓 Chrome：按一下就跳出系統的安裝視窗
+let deferred = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; });
+window.addEventListener('appinstalled', () => { LS.set('lib_installed', '1'); $('#add').hidden = true; $('#addedNote').hidden = false; });
+
+$('#add').addEventListener('click', async () => {
+  if (deferred) {
+    deferred.prompt();
+    const r = await deferred.userChoice;
+    if (r.outcome === 'accepted') LS.set('lib_installed', '1');
+    deferred = null;
+    return;
+  }
+  if (isIOS) {
+    // 讓 iPhone 加到主畫面的是 ?home=1 這個網址，之後從主畫面點開就會直接進自習室
+    if (q.get('home') !== '1') history.replaceState(null, '', '?home=1');
+    LS.set('lib_home_seen', '1');
+    $('#ios').hidden = false;
+  } else {
+    $('#other').hidden = false;
+  }
+});
+$('#iosOk').addEventListener('click', () => $('#ios').hidden = true);
+$('#otherOk').addEventListener('click', () => $('#other').hidden = true);
+document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.hidden = true; }));
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+}
+</script>
+</body></html>
