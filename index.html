@@ -7,8 +7,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="icons/icon-180.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* 線上自習室：GitHub 入口頁。跟自習室同樣的夜晚配色 */
@@ -37,7 +37,7 @@ ol{margin:0;padding-left:1.4em}ol li{margin:8px 0}
 </style></head><body>
 <div class="wrap">
   <div class="warn" id="setupWarn" hidden>老師還沒有設定自習室的網址：請打開 index.html，把最上面的 <b>APP_URL</b> 換成 Apps Script 的網頁網址。</div>
-  <img class="icon" src="icons/icon-512.png" alt="">
+  <img class="icon" src="icon-512.png" alt="">
   <h1>線上自習室</h1>
   <p class="sub">打開就有人陪你讀書</p>
 
@@ -82,7 +82,7 @@ ol{margin:0;padding-left:1.4em}ol li{margin:8px 0}
 <script>
 {
 // ▼▼▼ 老師要改的地方：換成 Apps Script「網頁應用程式」的網址 ▼▼▼
-const APP_URL = 'https://script.google.com/a/macros/sssh.tp.edu.tw/s/在這裡貼上你的部署ID/exec';
+const APP_URL = 'https://script.google.com/a/macros/sssh.tp.edu.tw/s/AKfycbyaUcrLV24gs9hj5u1KQA-V4yW8PU0tlt3ibrFce2CNZiKkTEY2l-yK2UJ2Fx9hQbAB/exec';
 // ▲▲▲ 改完存檔、上傳到 GitHub 就好 ▲▲▲
 
 const $ = s => document.querySelector(s);
