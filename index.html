@@ -2,6 +2,13 @@
 <html lang="zh-Hant-TW"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>線上自習室</title>
+<meta name="description" content="松山高中的線上自習室。打開就有人陪你讀書。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://contenttt0307-rgb.github.io/study-room/">
+<meta property="og:title" content="線上自習室">
+<meta property="og:description" content="打開就有人陪你讀書。用學校 Google 帳號登入。">
+<meta property="og:image" content="https://contenttt0307-rgb.github.io/study-room/icon-512.png">
+<meta property="og:image:width" content="512"><meta property="og:image:height" content="512">
 <meta name="theme-color" content="#f6f4ef">
 <meta name="apple-mobile-web-app-title" content="線上自習室">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -36,7 +43,7 @@ ol{margin:0;padding-left:1.3em;font-size:15px}ol li{margin:8px 0}ol li::marker{c
 .sheet h2{margin:0 0 12px;font-size:18px;font-weight:500;letter-spacing:.1em}
 </style></head><body>
 <div class="wrap">
-  <div class="warn" id="setupWarn" hidden>老師還沒有設定自習室的網址：請打開 index.html，把最上面的 <b>APP_URL</b> 換成 Apps Script 的網頁網址。</div>
+  <div class="warn" id="setupWarn" hidden></div>
   <img class="icon" src="icon-512.png" alt="">
   <h1>線上自習室</h1>
   <p class="sub">打開就有人陪你讀書</p>
@@ -93,6 +100,7 @@ const standalone = window.matchMedia('(display-mode: standalone)').matches || na
 const q = new URLSearchParams(location.search);
 
 $('#setupWarn').hidden = ready;
+if (!ready) $('#setupWarn').innerHTML = '老師還沒有設定自習室的網址：請打開 index.html，把最上面的 <b>APP_URL</b> 換成 Apps Script 的網頁網址。';
 $('#go').href = ready ? APP_URL : '#';
 $('#go').addEventListener('click', e => { if (!ready) { e.preventDefault(); $('#setupWarn').scrollIntoView(); } });
 
