@@ -98,16 +98,22 @@ const LS = { get(k){try{return localStorage.getItem(k)}catch(e){return null}}, s
 const ua = navigator.userAgent, isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
 const q = new URLSearchParams(location.search);
+// 校友專屬連結：?k=代碼。記在這支手機上，之後從主畫面打開也會自動帶著
+const qk = (q.get('k') || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+if (qk) LS.set('lib_k', qk);
+const GK = qk || LS.get('lib_k') || '';
+// 校友不是學校網域，要用一般的網址（不帶 /a/macros/學校網域/），學生照舊
+const TARGET = !ready ? '#' : GK ? APP_URL.replace(/\/a\/macros\/[^/]+\//, '/macros/') + '?k=' + GK : APP_URL;
 
 $('#setupWarn').hidden = ready;
 if (!ready) $('#setupWarn').innerHTML = '老師還沒有設定自習室的網址：請打開 index.html，把最上面的 <b>APP_URL</b> 換成 Apps Script 的網頁網址。';
-$('#go').href = ready ? APP_URL : '#';
+$('#go').href = TARGET;
 $('#go').addEventListener('click', e => { if (!ready) { e.preventDefault(); $('#setupWarn').scrollIntoView(); } });
 
 // 從主畫面打開：直接進自習室
 // 安卓：manifest 的 start_url 帶 ?go=1；iPhone：從 ?home=1 這個網址加到主畫面，之後打開就直接進去
 if (ready && (q.get('go') === '1' || standalone || (q.get('home') === '1' && LS.get('lib_home_seen')))) {
-  location.replace(APP_URL);
+  location.replace(TARGET);
 }
 if (q.get('home') === '1') LS.set('lib_home_seen', '1');
 
